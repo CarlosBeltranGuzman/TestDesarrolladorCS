@@ -10,8 +10,6 @@ import edu.cecar.controladores.ControladorApiGoRest;
 import edu.cecar.modelo.Users;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import us.monoid.json.JSONException;
 
 /**
@@ -22,7 +20,7 @@ public class ServidorObject {
 
     public ServidorObject(int puerto) throws IOException, JSONException, ClassNotFoundException{
         ArrayList<Users> users = ControladorApiGoRest.ControladorApiGoRest();
-        System.out.println("Servidor Montado");
+        System.out.println("Espernado Cliente");
         ServerSocketObjeto socketObjeto = new ServerSocketObjeto(puerto);
         while (true) {            
             

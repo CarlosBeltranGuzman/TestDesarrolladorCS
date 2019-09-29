@@ -2,7 +2,7 @@ package edu.cecar.controladores;
 
 import edu.cecar.componentes.singleton.SingletonConexionBD;
 import edu.cecar.modelo.Users;
-import edu.cecar.vista.Vista;
+//import edu.cecar.vista.Vista;
 import java.awt.Image;
 import java.io.IOException;
 import java.net.URL;
@@ -25,8 +25,6 @@ import us.monoid.json.JSONException;
  * @author 1102888499
  */
 public class ControladorApiGoRest {
-    private static ResultSet r = null;
-    private static PreparedStatement sql=null;
     public static ArrayList<Users> users;
     
     public static ArrayList<Users> ControladorApiGoRest() throws IOException, JSONException {
@@ -60,7 +58,6 @@ public class ControladorApiGoRest {
                                  jsonArrayResultComments.getJSONObject(i).get("body").toString(), 
                                  imagen);
                 users.add(user);
-                System.out.println(i);
             }
             System.out.println("Archivos cargados");
         return users;  
