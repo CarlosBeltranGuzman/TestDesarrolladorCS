@@ -20,21 +20,18 @@ public class ServidorObject {
 
     public ServidorObject(int puerto) throws IOException, JSONException, ClassNotFoundException{
         ArrayList<Users> users = ControladorApiGoRest.ControladorApiGoRest();
-        System.out.println("Espernado Cliente");
+        System.out.println("Servidor Montado  -  Esperando Cliente");
         ServerSocketObjeto socketObjeto = new ServerSocketObjeto(puerto);
         while (true) {            
-            
-                System.out.println("IP Cliente: " + socketObjeto.getSocket().getLocalAddress());
-                OpcionObject opcionObject = (OpcionObject) socketObjeto.getEntrada().readObject();
-                OpcionObject rest;
-                if ("Users".equalsIgnoreCase(opcionObject.getOpcion())){
-                    rest = new UserObject(users);
-                }else{
-                    rest = new UserObject("Servicio no valido");
-                }
-                socketObjeto.getSalida().writeObject(rest);
-            
+            System.out.println("IP Cliente: " + socketObjeto.getSocket().getLocalAddress());
+            OpcionObject opcionObject = (OpcionObject) socketObjeto.getEntrada().readObject();
+            OpcionObject rest;
+            if ("Users".equalsIgnoreCase(opcionObject.getOpcion())){
+                rest = new UserObject(users);
+            }else{
+                rest = new UserObject("Servicio no valido");
+            }
+            socketObjeto.getSalida().writeObject(rest);
         }
     }
-    
 }

@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author carlo
+ * @author carlos 
  */
 public class OpcionObject implements Serializable{
     private static final long serialVersionUID = 1420672609912364060L;

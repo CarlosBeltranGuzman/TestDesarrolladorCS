@@ -6,14 +6,15 @@
 package edu.cecar.vista;
 
 import edu.cecar.componentes.comunicaciones.SocketObjeto;
-
-import edu.cecar.controladores.ControladorApiGoRest;
 import edu.cecar.modelo.Users;
-import edu.cecar.modelo.objetos.ClienteObject;
+import edu.cecar.modelo.objetos.OpcionObject;
 import edu.cecar.modelo.objetos.UserObject;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -30,13 +31,19 @@ public class VistaCliente extends javax.swing.JFrame {
     
     /**
      * Creates new form VistaCS
+     * @param ip
+     * @param puerto
+     * @throws java.io.IOException
+     * @throws java.lang.ClassNotFoundException
      */
-    public VistaCliente() {
+    public VistaCliente(String ip, int puerto) throws IOException, ClassNotFoundException {
         initComponents();
-        
-        ClienteObject clienteObject = new ClienteObject("192.168.0.105", 17000);
+        SocketObjeto socketObjetoCliente = new  SocketObjeto(ip, puerto);
+        OpcionObject object = new OpcionObject("Users");
+        socketObjetoCliente.getSalida().writeObject(object);
+        UserObject userObject = (UserObject) socketObjetoCliente.getEntrada().readObject();
         try {
-           users = ControladorApiGoRest.ControladorApiGoRest();
+            users = userObject.getUsers();
             String matris[][] = new String[users.size()][12];
             for (int i = 0; i < users.size(); i++) {
                 matris[i][0] = String.valueOf(users.get(i).getId());
@@ -63,7 +70,7 @@ public class VistaCliente extends javax.swing.JFrame {
             DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
             jTable1.setRowSorter(new TableRowSorter(modelo));
         } catch (Exception ex) {
-            
+            System.out.println("Error: " + ex.getMessage());
         }
     }
 
@@ -107,6 +114,7 @@ public class VistaCliente extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("UsuariosApiGoRest");
 
         jPanel1.setBackground(new java.awt.Color(153, 255, 255));
 
@@ -302,10 +310,11 @@ public class VistaCliente extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
@@ -353,22 +362,21 @@ public class VistaCliente extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VistaCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VistaCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VistaCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(VistaCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
+        
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new VistaCliente().setVisible(true);
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new VistaCliente("192.168.0.105", 17000).setVisible(true);
+            } catch (IOException | ClassNotFoundException ex) {
+                Logger.getLogger(VistaCliente.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
